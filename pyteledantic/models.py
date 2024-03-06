@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional, Union, List
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class Bot(BaseModel):
@@ -65,7 +65,7 @@ class Location(BaseModel):
     heading: Optional[int] = None
     proximity_alert_radius: Optional[int] = None
 
-    @validator('horizontal_accuracy')
+    @field_validator('horizontal_accuracy')
     def size_horizontal_accuracy_must_contain_a_range(cls, v):
         if v < 0 or v > 1500:
             raise ValueError('Must contain a range of 0 - 1500')
@@ -302,7 +302,7 @@ class Poll(BaseModel):
     open_period: Optional[int] = None
     close_date: Optional[int] = None
 
-    @validator('question')
+    @field_validator('question')
     def question_characters_limit(cls, v):
         if len(v) > 300:
             raise ValueError('question limited 300 characters')
@@ -698,7 +698,7 @@ class InlineQuery(BaseModel):
     chat_type: Optional[str] = None
     location: Optional[Location] = None
 
-    @validator('query')
+    @field_validator('query')
     def query_characters_limit(cls, v):
         if len(v) > 256:
             raise ValueError('query limited 256 characters')
